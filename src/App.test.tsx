@@ -12,12 +12,25 @@ describe('App', () => {
 
   it('opens on the Your Star tab', () => {
     render(<App />)
-    expect(screen.getByRole('tab', { name: 'Your Star' })).toHaveAttribute(
-      'aria-selected',
-      'true',
-    )
+    const link = screen.getByRole('link', { name: 'Your Star' })
+    expect(link).toHaveAttribute('href', '#/your-star')
+    expect(link).toHaveAttribute('aria-current', 'page')
     expect(
       screen.getByRole('heading', { name: 'Your Star: Starry McStarface' }),
     ).toBeInTheDocument()
+  })
+
+  it('opens the first tab when the hash is unknown', () => {
+    window.location.hash = '#/nonsense'
+    render(<App />)
+    expect(screen.getByRole('link', { name: 'Your Star' })).toHaveAttribute(
+      'aria-current',
+      'page',
+    )
+  })
+
+  it('shows a Reset demo data button', () => {
+    render(<App />)
+    expect(screen.getByRole('button', { name: 'Reset demo data' })).toBeInTheDocument()
   })
 })

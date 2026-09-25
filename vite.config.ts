@@ -6,5 +6,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    // Node 25's built-in localStorage shadows jsdom's and is unusable without a file.
+    execArgv: ['--no-experimental-webstorage'],
   },
 })
