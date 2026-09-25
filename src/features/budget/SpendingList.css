@@ -1,0 +1,82 @@
+.spending-list {
+  min-width: 0;
+}
+
+.spending-list__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.spending-list__empty {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border: 1px dashed var(--color-border);
+  border-radius: 8px;
+  color: var(--color-text-muted);
+}
+
+.spending-item {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.spending-item__top,
+.spending-item__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.25rem 0.75rem;
+}
+
+.spending-item__top {
+  flex-wrap: nowrap;
+}
+
+.spending-item__bottom {
+  align-items: center;
+  margin-top: 0.25rem;
+}
+
+.spending-item__description {
+  min-width: 0;
+  margin: 0;
+  font-size: 1.125rem;
+  line-height: 1.3;
+}
+
+.spending-item__amount {
+  font-size: 1.125rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.spending-item__detail {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+/* Colors match the bar: paid = gold, pending = charcoal. */
+.spending-item__status {
+  padding: 0.125rem 0.625rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.spending-item__status--paid {
+  background: #fff0c7;
+  color: var(--color-charcoal);
+}
+
+.spending-item__status--pending {
+  border: 1px solid var(--color-charcoal);
+  color: var(--color-charcoal);
+}

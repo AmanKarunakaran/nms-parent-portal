@@ -1,0 +1,82 @@
+.reimbursement-form {
+  min-width: 0;
+}
+
+.reimbursement-form__card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.reimbursement-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.reimbursement-form__field label {
+  font-weight: 600;
+}
+
+.reimbursement-form__field input,
+.reimbursement-form__field select {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #8a8a8a;
+  border-radius: 6px;
+  background: #ffffff;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.reimbursement-form__field input:focus-visible,
+.reimbursement-form__field select:focus-visible,
+.reimbursement-form__submit:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 2px;
+}
+
+.reimbursement-form__field [aria-invalid='true'] {
+  border: 2px solid #b3261e;
+}
+
+.reimbursement-form__error {
+  margin: 0;
+  color: #b3261e;
+  font-weight: 600;
+}
+
+.reimbursement-form__helper {
+  margin: 0;
+  color: var(--color-text-muted);
+}
+
+.reimbursement-form__submit {
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-charcoal);
+  color: #ffffff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.reimbursement-form__submit:hover {
+  background: #3d404e;
+}
+
+.reimbursement-form__status {
+  margin: 0;
+  font-weight: 600;
+}
+
+.reimbursement-form__status:empty {
+  display: none;
+}
