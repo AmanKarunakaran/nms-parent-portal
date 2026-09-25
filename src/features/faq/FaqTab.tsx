@@ -6,7 +6,9 @@ export function FaqTab() {
   return (
     <section>
       <h2 className="faq-tab__title">Questions &amp; answers</h2>
-      <p className="faq-tab__subtitle">Tap a question to see the answer.</p>
+      <p className="faq-tab__subtitle">
+        (These are silly because I made the AI guess what FAQs should be there.)
+      </p>
       <div className="faq-tab__list">
         {faq.map((item) => (
           <details key={item.id} className="faq-tab__item">
