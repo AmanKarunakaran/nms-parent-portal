@@ -1,7 +1,6 @@
 .course-card {
   padding: 1rem 1.25rem;
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-gold);
   border-radius: 8px;
   background: #ffffff;
 }
