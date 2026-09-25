@@ -1,6 +1,8 @@
 import type { ComponentType } from 'react'
 import { BudgetTab } from './features/budget/BudgetTab'
 import { FamilyTab } from './features/family/FamilyTab'
+import { TodosBadge } from './features/todos/TodosBadge'
+import { TodosTab } from './features/todos/TodosTab'
 import { YourStarTab } from './features/your-star/YourStarTab'
 
 export type Tab = {
@@ -15,6 +17,7 @@ export type Tab = {
 // Tabs render in this order. Adding a section = one new entry here.
 export const tabs: readonly Tab[] = [
   { id: 'your-star', label: 'Your Star', Component: YourStarTab },
+  { id: 'todos', label: 'To-dos', Component: TodosTab, Badge: TodosBadge },
   { id: 'family', label: 'Family info', Component: FamilyTab },
   { id: 'budget', label: 'Budget', Component: BudgetTab },
 ]

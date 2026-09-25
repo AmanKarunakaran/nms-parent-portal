@@ -1,0 +1,35 @@
+.todo-group__title {
+  margin: 0;
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.todo-group__hint {
+  margin: 0.25rem 0 1rem;
+  color: var(--color-text-muted);
+}
+
+.todo-group__toggle {
+  margin-bottom: 1rem;
+  padding: 0.625rem 1.25rem;
+  border: 2px solid var(--color-charcoal);
+  border-radius: 8px;
+  background: #ffffff;
+  color: var(--color-charcoal);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.todo-group__toggle:hover {
+  background: #f3f3f3;
+}
+
+.todo-group__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}

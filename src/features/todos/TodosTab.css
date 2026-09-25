@@ -1,0 +1,37 @@
+.todos {
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.todos__title {
+  margin: 0 0 0.25rem;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.todos__summary {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.todos__hint {
+  margin: 0.25rem 0 2rem;
+  color: var(--color-text-muted);
+}
+
+.todos__all-done {
+  margin: 0 0 2rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: #fff8e6;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.todos__groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
