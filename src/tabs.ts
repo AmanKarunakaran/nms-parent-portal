@@ -2,6 +2,7 @@ import type { ComponentType } from 'react'
 import { BudgetTab } from './features/budget/BudgetTab'
 import { EventsBadge } from './features/events/EventsBadge'
 import { EventsTab } from './features/events/EventsTab'
+import { FaqTab } from './features/faq/FaqTab'
 import { FamilyTab } from './features/family/FamilyTab'
 import { TodosBadge } from './features/todos/TodosBadge'
 import { TodosTab } from './features/todos/TodosTab'
@@ -23,4 +24,5 @@ export const tabs: readonly Tab[] = [
   { id: 'family', label: 'Family info', Component: FamilyTab },
   { id: 'budget', label: 'Budget', Component: BudgetTab },
   { id: 'events', label: 'Events', Component: EventsTab, Badge: EventsBadge },
+  { id: 'faq', label: 'FAQ', Component: FaqTab },
 ]

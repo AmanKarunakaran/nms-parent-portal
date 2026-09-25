@@ -1,0 +1,36 @@
+.faq-tab__title {
+  margin-bottom: 0.25rem;
+}
+
+.faq-tab__subtitle {
+  margin-top: 0;
+  color: var(--color-text-muted);
+}
+
+.faq-tab__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 48rem;
+}
+
+.faq-tab__item {
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.faq-tab__question {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.faq-tab__answer {
+  margin: 0.75rem 0 0.5rem;
+}
+
+.faq-tab__link {
+  color: var(--color-charcoal);
+  font-weight: 600;
+}
