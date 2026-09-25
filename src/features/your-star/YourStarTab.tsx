@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { courses, liveEvents } from '../../data/history'
 import { star } from '../../data/star'
+import { recordAction } from '../../lib/portalActions'
 import { CourseCard } from './CourseCard'
 import { EventCard } from './EventCard'
 import { HistoryColumn } from './HistoryColumn'
@@ -11,6 +13,8 @@ function newestFirst<T extends { startDate: string }>(items: T[]): T[] {
 }
 
 export function YourStarTab() {
+  useEffect(() => recordAction('your-star.viewed'), [])
+
   return (
     <section>
       <h2 className="your-star__title">Your Star: {star.name}</h2>

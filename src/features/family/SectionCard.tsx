@@ -11,6 +11,8 @@ type SectionCardProps = {
   // False while another card is being edited: only one card is edited at a time.
   canEdit: boolean
   statusMessage: string
+  confirmed: boolean
+  onConfirm: () => void
   onEdit: () => void
   onCancel: () => void
   onSave: (values: SectionValues) => void
@@ -26,6 +28,8 @@ export function SectionCard({
   isEditing,
   canEdit,
   statusMessage,
+  confirmed,
+  onConfirm,
   onEdit,
   onCancel,
   onSave,
@@ -48,16 +52,25 @@ export function SectionCard({
           {section.title}
         </h3>
         {!isEditing && (
-          <button
-            ref={editButtonRef}
-            type="button"
-            className="family-card__button"
-            aria-label={section.editLabel}
-            disabled={!canEdit}
-            onClick={onEdit}
-          >
-            Edit
-          </button>
+          <div className="family-card__actions">
+            {confirmed ? (
+              <span className="family-card__confirmed">✓ Confirmed</span>
+            ) : (
+              <button type="button" className="family-card__button" disabled={!canEdit} onClick={onConfirm}>
+                Yes, this is correct
+              </button>
+            )}
+            <button
+              ref={editButtonRef}
+              type="button"
+              className="family-card__button"
+              aria-label={section.editLabel}
+              disabled={!canEdit}
+              onClick={onEdit}
+            >
+              Edit
+            </button>
+          </div>
         )}
       </div>
 

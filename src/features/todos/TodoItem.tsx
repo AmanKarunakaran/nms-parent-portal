@@ -32,14 +32,16 @@ function DueLine({ dueDate, groupId }: { dueDate: string; groupId: TodoGroupId }
   return <p className="todo-item__due">Due {date}</p>
 }
 
-// Open to-dos have a checkbox that only selects them; the tab's confirm button
-// marks the selection as done. Done to-dos get a button to move them back.
+// Open manual to-dos have a checkbox that only selects them; the tab's confirm
+// button marks the selection as done. Done manual to-dos get a button to move them
+// back. Automatic to-dos (`completedBy`) have neither: they check themselves off.
 export function TodoItem({ todo, groupId, selected, onSelect, onMoveBack }: TodoItemProps) {
   const titleId = useId()
   const done = groupId === 'done'
+  const automatic = todo.completedBy !== undefined
   return (
     <article className={`todo-item todo-item--${groupId}`}>
-      {!done && (
+      {!done && !automatic && (
         <input
           type="checkbox"
           className="todo-item__checkbox"
@@ -54,12 +56,14 @@ export function TodoItem({ todo, groupId, selected, onSelect, onMoveBack }: Todo
         </h4>
         <p className="todo-item__why">{todo.why}</p>
         <DueLine dueDate={todo.dueDate} groupId={groupId} />
+        {todo.completedBy && !done && <p className="todo-item__auto-hint">{todo.completedBy.hint}</p>}
         {todo.link && !done && (
           <a className="todo-item__link" href={tabHref(todo.link.tabId)}>
             Go to {todo.link.label} <span aria-hidden="true">→</span>
           </a>
         )}
-        {done && (
+        {done && automatic && <p className="todo-item__auto-done">✓ Done</p>}
+        {done && !automatic && (
           <button type="button" className="todo-item__move-back" onClick={() => onMoveBack(todo.id)}>
             Move back to my to-dos
           </button>

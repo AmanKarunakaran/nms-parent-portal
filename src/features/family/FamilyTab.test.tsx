@@ -131,4 +131,28 @@ describe('FamilyTab', () => {
     expect(within(school).getByText('Kindergarten')).toBeInTheDocument()
     expect(loadJson('family.edits', null)).toEqual({ school: { grade: 'K' } })
   })
+
+  it('records a confirmation and swaps the button for Confirmed', () => {
+    render(<FamilyTab />)
+    const address = card('Home address')
+    fireEvent.click(within(address).getByRole('button', { name: 'Yes, this is correct' }))
+    expect(loadJson('actions.done', {})).toHaveProperty(['family.address.confirmed'])
+    expect(within(address).getByRole('status')).toHaveTextContent('✓ Thanks for confirming!')
+    expect(within(address).getByText('✓ Confirmed')).toBeInTheDocument()
+    expect(within(address).queryByRole('button', { name: 'Yes, this is correct' })).not.toBeInTheDocument()
+    expect(within(address).getByRole('button', { name: 'Edit home address' })).toBeEnabled()
+    expect(loadJson('actions.done', {})).not.toHaveProperty(['family.school.confirmed'])
+  })
+
+  it('records the confirmation when an edit is saved', () => {
+    render(<FamilyTab />)
+    const school = card("Your Star's school")
+    fireEvent.click(screen.getByRole('button', { name: "Edit your Star's school" }))
+    expect(
+      within(card('Home address')).getByRole('button', { name: 'Yes, this is correct' }),
+    ).toBeDisabled()
+    fireEvent.click(within(school).getByRole('button', { name: 'Save' }))
+    expect(loadJson('actions.done', {})).toHaveProperty(['family.school.confirmed'])
+    expect(within(school).getByText('✓ Confirmed')).toBeInTheDocument()
+  })
 })

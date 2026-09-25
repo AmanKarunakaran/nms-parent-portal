@@ -1,4 +1,5 @@
 import { budget, transactions, type ReimbursementRequest } from '../../data/budget'
+import { recordAction } from '../../lib/portalActions'
 import { usePersistentState } from '../../lib/usePersistentState'
 import { BudgetSummary } from './BudgetSummary'
 import { budgetEntries, paid, pending, remaining } from './budgetMath'
@@ -27,7 +28,10 @@ export function BudgetTab() {
         <SpendingList entries={budgetEntries(transactions, requests)} />
         <ReimbursementForm
           left={left}
-          onSubmit={(request) => setRequests((current) => [...current, request])}
+          onSubmit={(request) => {
+            setRequests((current) => [...current, request])
+            if (request.category === 'Summer camp') recordAction('budget.summer-camp.requested')
+          }}
         />
       </div>
     </section>

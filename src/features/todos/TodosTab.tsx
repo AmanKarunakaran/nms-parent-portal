@@ -38,13 +38,14 @@ const GROUPS: {
 ]
 
 export function TodosTab() {
-  const { completed, markDone, moveBack } = useCompletedTodos()
+  const { completed, markDone, moveBack, isAutomatic } = useCompletedTodos()
   const [selected, setSelected] = useState<string[]>([])
   const [statusMessage, setStatusMessage] = useState('')
   const groups = groupTodos(todos, completed, DEMO_TODAY)
   const allDone = groups.done.length === todos.length
   // Something completed elsewhere is no longer selectable.
-  const selectedOpen = selected.filter((id) => !completed.includes(id))
+  const manualIds = todos.filter((todo) => !isAutomatic(todo)).map((todo) => todo.id)
+  const selectedOpen = selected.filter((id) => manualIds.includes(id) && !completed.includes(id))
 
   useLogShownOnce(
     GROUPS.filter((group) => !group.showLabel).flatMap((group) => groups[group.id].map((todo) => todo.id)),
@@ -91,8 +92,8 @@ export function TodosTab() {
     <section className="todos">
       <h2 className="todos__title">To-dos</h2>
       <p className="todos__hint">
-        Tick the to-dos you've finished, then press the button to mark them as done. Links take
-        you to the part of the portal where you can do each one.
+        Some to-dos check themselves off when you finish them in the portal. For the rest, tick
+        them when they're done and press the button.
       </p>
 
       {/* The open groups are all empty by now, so this takes their place. */}

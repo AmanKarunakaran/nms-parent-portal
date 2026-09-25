@@ -90,3 +90,9 @@
   text-decoration-thickness: 2px;
   text-underline-offset: 3px;
 }
+
+.todo-item__auto-hint,
+.todo-item__auto-done {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-muted);
+}

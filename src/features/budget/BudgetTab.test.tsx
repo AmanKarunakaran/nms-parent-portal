@@ -1,5 +1,6 @@
 import { fireEvent, render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { loadJson } from '../../lib/storage'
 import { BudgetTab } from './BudgetTab'
 
 function fillForm(values: { description: string; category: string; date: string; amount: string }) {
@@ -93,5 +94,13 @@ describe('BudgetTab', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Send request' }))
     expect(screen.getByLabelText('What did you buy?')).toHaveFocus()
     expect(screen.getByText('Please enter how much you paid.')).toBeInTheDocument()
+  })
+
+  it('records a summer camp request, but not other categories', () => {
+    render(<BudgetTab />)
+    fillForm({ description: 'Workbook', category: 'Books & supplies', date: '2026-09-24', amount: '10' })
+    expect(loadJson('actions.done', {})).toEqual({})
+    fillForm({ description: 'Camp', category: 'Summer camp', date: '2026-09-24', amount: '10' })
+    expect(loadJson('actions.done', {})).toHaveProperty(['budget.summer-camp.requested'])
   })
 })

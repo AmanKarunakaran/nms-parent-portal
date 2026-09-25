@@ -1,15 +1,16 @@
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { StrictMode } from 'react'
 import { describe, expect, it } from 'vitest'
 import { todos } from '../../data/todos'
+import { recordAction } from '../../lib/portalActions'
 import { loadJson, saveJson } from '../../lib/storage'
 import { readTodoLog } from './todoLog'
 import { TodosTab } from './TodosTab'
 
 const ADDRESS = 'Confirm your home address for the 2026–27 school year'
-const CAMP_RECEIPT = 'Send in your summer camp receipt'
+const CAMP = 'Ask to be paid back for summer camp'
 const PHOTO_RELEASE = "Return the signed photo release form to your Star's teacher"
-const CONTACT = 'Add a second emergency contact'
+const BUDGET_PLAN = "Plan how you'll use this year's family budget"
 
 const group = (name: string) => screen.getByRole('region', { name })
 const checkbox = (title: string) => screen.getByRole('checkbox', { name: title })
@@ -47,19 +48,19 @@ describe('TodosTab', () => {
     render(<TodosTab />)
     expect(confirmButton()).not.toBeInTheDocument()
 
-    fireEvent.click(checkbox(CAMP_RECEIPT))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
     expect(screen.getByRole('button', { name: 'Mark 1 to-do as done' })).toBeInTheDocument()
 
-    fireEvent.click(checkbox(CAMP_RECEIPT))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
     expect(confirmButton()).not.toBeInTheDocument()
   })
 
   it('only selects on check: nothing moves, saves or logs until confirmed', () => {
     render(<TodosTab />)
-    fireEvent.click(checkbox(CAMP_RECEIPT))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
 
-    expect(checkbox(CAMP_RECEIPT)).toBeChecked()
-    expect(group('Coming up')).toContainElement(cardFor(CAMP_RECEIPT))
+    expect(checkbox(PHOTO_RELEASE)).toBeChecked()
+    expect(group('Soon')).toContainElement(cardFor(PHOTO_RELEASE))
     expect(screen.queryByRole('region', { name: 'Done' })).not.toBeInTheDocument()
     expect(loadJson('todos.completed', [])).toEqual([])
     expect(nonShownLog()).toEqual([])
@@ -67,54 +68,55 @@ describe('TodosTab', () => {
 
   it('does nothing when the title is clicked', () => {
     render(<TodosTab />)
-    fireEvent.click(screen.getByRole('heading', { level: 4, name: CAMP_RECEIPT }))
-    expect(checkbox(CAMP_RECEIPT)).not.toBeChecked()
+    fireEvent.click(screen.getByRole('heading', { level: 4, name: PHOTO_RELEASE }))
+    expect(checkbox(PHOTO_RELEASE)).not.toBeChecked()
     expect(confirmButton()).not.toBeInTheDocument()
   })
 
   it('moves confirmed to-dos to Done, says so, and keeps them there after a remount', () => {
     const first = render(<TodosTab />)
-    fireEvent.click(checkbox(CAMP_RECEIPT))
-    fireEvent.click(checkbox(CONTACT))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
+    fireEvent.click(screen.getByRole('button', { name: 'Show 3 more to-dos' }))
+    fireEvent.click(checkbox(BUDGET_PLAN))
     fireEvent.click(screen.getByRole('button', { name: 'Mark 2 to-dos as done' }))
 
     expect(screen.getByRole('status')).toHaveTextContent('Nice work! 2 to-dos marked as done.')
     expect(confirmButton()).not.toBeInTheDocument()
-    expect(screen.queryByRole('region', { name: 'Coming up' })).not.toBeInTheDocument()
-    expect(loadJson('todos.completed', [])).toEqual(['todo-camp-receipt', 'todo-emergency-contact'])
+    expect(screen.queryByRole('region', { name: 'Soon' })).not.toBeInTheDocument()
+    expect(loadJson('todos.completed', [])).toEqual(['todo-photo-release', 'todo-budget-plan'])
 
     first.unmount()
     render(<TodosTab />)
     fireEvent.click(screen.getByRole('button', { name: 'Show 2 done to-dos' }))
-    expect(within(group('Done')).getByRole('heading', { name: CAMP_RECEIPT })).toBeInTheDocument()
+    expect(within(group('Done')).getByRole('heading', { name: PHOTO_RELEASE })).toBeInTheDocument()
     expect(within(group('Done')).queryAllByRole('checkbox')).toHaveLength(0)
   })
 
   it('moves a done to-do back with its undo button', () => {
-    saveJson('todos.completed', ['todo-camp-receipt'])
+    saveJson('todos.completed', ['todo-photo-release'])
     render(<TodosTab />)
     fireEvent.click(screen.getByRole('button', { name: 'Show 1 done to-do' }))
-    fireEvent.click(within(cardFor(CAMP_RECEIPT)).getByRole('button', { name: 'Move back to my to-dos' }))
+    fireEvent.click(within(cardFor(PHOTO_RELEASE)).getByRole('button', { name: 'Move back to my to-dos' }))
 
     expect(screen.queryByRole('region', { name: 'Done' })).not.toBeInTheDocument()
-    expect(checkbox(CAMP_RECEIPT)).not.toBeChecked()
-    expect(group('Coming up')).toContainElement(cardFor(CAMP_RECEIPT))
+    expect(checkbox(PHOTO_RELEASE)).not.toBeChecked()
+    expect(group('Soon')).toContainElement(cardFor(PHOTO_RELEASE))
     expect(loadJson('todos.completed', ['x'])).toEqual([])
   })
 
   it('logs completed on confirm and uncompleted on undo, not on select', () => {
     render(<TodosTab />)
-    fireEvent.click(checkbox(ADDRESS))
-    fireEvent.click(checkbox(ADDRESS))
-    fireEvent.click(checkbox(ADDRESS))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
+    fireEvent.click(checkbox(PHOTO_RELEASE))
     expect(nonShownLog()).toEqual([])
 
     fireEvent.click(screen.getByRole('button', { name: 'Mark 1 to-do as done' }))
     fireEvent.click(screen.getByRole('button', { name: 'Show 1 done to-do' }))
     fireEvent.click(screen.getByRole('button', { name: 'Move back to my to-dos' }))
     expect(nonShownLog()).toEqual([
-      ['todo-confirm-address', 'completed'],
-      ['todo-confirm-address', 'uncompleted'],
+      ['todo-photo-release', 'completed'],
+      ['todo-photo-release', 'uncompleted'],
     ])
   })
 
@@ -125,16 +127,20 @@ describe('TodosTab', () => {
 
     fireEvent.click(button)
     expect(button).toHaveAttribute('aria-expanded', 'true')
-    expect(within(group('Later')).getAllByRole('checkbox')).toHaveLength(3)
+    expect(within(group('Later')).getAllByRole('heading', { level: 4 })).toHaveLength(3)
 
     fireEvent.click(screen.getByRole('button', { name: 'Hide these to-dos' }))
-    expect(within(group('Later')).queryAllByRole('checkbox')).toHaveLength(0)
+    expect(within(group('Later')).queryAllByRole('heading', { level: 4 })).toHaveLength(0)
   })
 
   it('shows a warm message in place of the lists when everything is done', () => {
     saveJson(
       'todos.completed',
-      todos.map((todo) => todo.id),
+      todos.filter((todo) => !todo.completedBy).map((todo) => todo.id),
+    )
+    saveJson(
+      'actions.done',
+      Object.fromEntries(todos.flatMap((todo) => (todo.completedBy ? [[todo.completedBy.action, 'x']] : []))),
     )
     render(<TodosTab />)
     expect(screen.getByText(/You're all caught up!/)).toBeInTheDocument()
@@ -147,11 +153,38 @@ describe('TodosTab', () => {
       'href',
       '#/family',
     )
-    expect(within(cardFor(CAMP_RECEIPT)).getByRole('link', { name: 'Go to Budget' })).toHaveAttribute(
+    expect(within(cardFor(CAMP)).getByRole('link', { name: 'Go to Budget' })).toHaveAttribute(
       'href',
       '#/budget',
     )
     expect(within(cardFor(PHOTO_RELEASE)).queryByRole('link')).not.toBeInTheDocument()
+  })
+
+  it('gives automatic to-dos no checkbox, just their hint and link', () => {
+    render(<TodosTab />)
+    const card = cardFor(ADDRESS)
+    expect(within(card).queryByRole('checkbox')).not.toBeInTheDocument()
+    expect(
+      within(card).getByText('This checks itself off when you confirm or update your address.'),
+    ).toBeInTheDocument()
+    expect(within(card).getByRole('link', { name: 'Go to Family info' })).toBeInTheDocument()
+  })
+
+  it('moves an automatic to-do to Done once its action is recorded, with no Move back', () => {
+    render(<TodosTab />)
+    act(() => recordAction('family.address.confirmed'))
+    expect(screen.queryByRole('region', { name: 'Overdue' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Show 1 done to-do' }))
+    const card = cardFor(ADDRESS)
+    expect(group('Done')).toContainElement(card)
+    expect(within(card).getByText('✓ Done')).toBeInTheDocument()
+    expect(within(card).queryByRole('button')).not.toBeInTheDocument()
+  })
+
+  it('never completes an automatic to-do by hand, even if its id was saved', () => {
+    saveJson('todos.completed', ['todo-confirm-address'])
+    render(<TodosTab />)
+    expect(group('Overdue')).toContainElement(cardFor(ADDRESS))
   })
 
   it('logs each visible open to-do as shown once per visit', () => {

@@ -1,5 +1,6 @@
 import { render, screen, within } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
+import { loadJson } from '../../lib/storage'
 import { YourStarTab } from './YourStarTab'
 
 function cardNamesIn(columnName: string) {
@@ -49,5 +50,10 @@ describe('YourStarTab', () => {
     render(<YourStarTab />)
     const events = screen.getByRole('region', { name: 'Events' })
     expect(within(events).getByText('Honorable Mention')).toBeInTheDocument()
+  })
+
+  it('records that the tab was opened', () => {
+    render(<YourStarTab />)
+    expect(loadJson('actions.done', {})).toHaveProperty(['your-star.viewed'])
   })
 })

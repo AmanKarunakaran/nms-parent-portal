@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { family } from '../../data/family'
 import { star } from '../../data/star'
+import { recordAction, useRecordedActions } from '../../lib/portalActions'
 import { usePersistentState } from '../../lib/usePersistentState'
 import {
   applySectionEdit,
@@ -14,13 +15,15 @@ import { SectionCard } from './SectionCard'
 import './FamilyTab.css'
 
 const SAVED_MESSAGE = 'Saved! NMS will use this from now on.'
+const CONFIRMED_MESSAGE = '✓ Thanks for confirming!'
 const SAVED_MESSAGE_MS = 4000
 
 export function FamilyTab() {
   const [edits, setEdits] = usePersistentState<FamilyEdits>('family.edits', {})
   const [editing, setEditing] = useState<SectionKey | null>(null)
   // A fresh object per save, so saving the same card twice restarts the timer.
-  const [justSaved, setJustSaved] = useState<{ key: SectionKey } | null>(null)
+  const [justSaved, setJustSaved] = useState<{ key: SectionKey; message: string } | null>(null)
+  const actions = useRecordedActions()
   const current = mergeFamily(family, edits)
 
   useEffect(() => {
@@ -37,7 +40,13 @@ export function FamilyTab() {
   function save(key: SectionKey, values: SectionValues) {
     setEdits((previous) => applySectionEdit(family, previous, key, values))
     setEditing(null)
-    setJustSaved({ key })
+    recordAction(`family.${key}.confirmed`)
+    setJustSaved({ key, message: SAVED_MESSAGE })
+  }
+
+  function confirm(key: SectionKey) {
+    recordAction(`family.${key}.confirmed`)
+    setJustSaved({ key, message: CONFIRMED_MESSAGE })
   }
 
   return (
@@ -59,7 +68,9 @@ export function FamilyTab() {
             values={current[section.key]}
             isEditing={editing === section.key}
             canEdit={editing === null}
-            statusMessage={justSaved?.key === section.key ? SAVED_MESSAGE : ''}
+            statusMessage={justSaved?.key === section.key ? justSaved.message : ''}
+            confirmed={Boolean(actions[`family.${section.key}.confirmed`])}
+            onConfirm={() => confirm(section.key)}
             onEdit={() => startEditing(section.key)}
             onCancel={() => setEditing(null)}
             onSave={(values) => save(section.key, values)}

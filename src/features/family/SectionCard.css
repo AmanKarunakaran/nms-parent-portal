@@ -158,3 +158,15 @@
 .family-card__status:empty {
   margin: 0;
 }
+
+.family-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.family-card__confirmed {
+  color: var(--color-text-muted);
+}
