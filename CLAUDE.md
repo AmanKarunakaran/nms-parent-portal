@@ -92,6 +92,22 @@ features.
 - All `localStorage` access goes through one small module (namespaced keys, safe
   JSON parse, a sensible default when the data is missing or corrupt). The UI should
   never call `localStorage` directly.
+- **Seed data plus saved changes.** Seed data is read-only; only what the parent did
+  is saved (completed to-do IDs, RSVP'd event IDs, submitted reimbursements). An
+  edited record saves only the changed fields, merged over the seed record. Never
+  save a copy of seed data or a full record.
+- Seed data lives in `src/data/<area>.ts`, one file per area, types and data
+  together, shaped like an API response (ISO date strings, a stable `id` on every
+  record).
+- Compare dates against `DEMO_TODAY` (`src/data/demoDate.ts`), never `new Date()`.
+- Save changes with `usePersistentState(key, initial)`, keyed `<feature>.<thing>`
+  (e.g. `todos.completed`). Features own their keys; there's no central list. Don't
+  call `src/lib/storage.ts` or `localStorage` from UI without a reason.
+- A feature may read another feature's key. Only one tab is mounted at a time, so a
+  read when the tab opens is current.
+- Link between tabs with `tabHref(id)` from `src/lib/tabHref.ts`.
+- A new tab = `src/data/<area>.ts` + `src/features/<area>/` + one line in
+  `src/tabs.ts`.
 
 ### Workflow
 - **Each significant feature gets its own git worktree and branch.** Don't build
