@@ -32,6 +32,18 @@
   font-weight: 700;
 }
 
+.tab-bar__label {
+  position: relative;
+}
+
+/* Sits in the tab's right padding, so the tab's width doesn't change. */
+.tab-bar__badge {
+  position: absolute;
+  top: -0.5rem;
+  right: -1rem;
+  display: flex;
+}
+
 /* Subdued so it doesn't compete with the tabs. */
 .tab-bar__reset {
   flex-shrink: 0;

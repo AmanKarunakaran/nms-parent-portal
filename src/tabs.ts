@@ -7,6 +7,9 @@ export type Tab = {
   id: string
   label: string
   Component: ComponentType
+  // Drawn at the top-right of the tab label. It renders nothing when there's
+  // nothing to flag.
+  Badge?: ComponentType
 }
 
 // Tabs render in this order. Adding a section = one new entry here.

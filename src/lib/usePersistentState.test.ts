@@ -18,4 +18,17 @@ describe('usePersistentState', () => {
     act(() => result.current[1]((ids) => [...ids, 'b']))
     expect(result.current[0]).toEqual(['a', 'b'])
   })
+
+  it('keeps two users of the same key in sync', () => {
+    const first = renderHook(() => usePersistentState<string[]>('test.shared', []))
+    const second = renderHook(() => usePersistentState<string[]>('test.shared', []))
+    const other = renderHook(() => usePersistentState<string[]>('test.other', ['x']))
+
+    act(() => first.result.current[1](['a']))
+    expect(second.result.current[0]).toEqual(['a'])
+
+    act(() => second.result.current[1]([]))
+    expect(first.result.current[0]).toEqual([])
+    expect(other.result.current[0]).toEqual(['x'])
+  })
 })

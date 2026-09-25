@@ -19,7 +19,14 @@ export function TabBar({ tabs, activeId }: TabBarProps) {
             aria-current={tab.id === activeId ? 'page' : undefined}
             className="tab-bar__tab"
           >
-            {tab.label}
+            <span className="tab-bar__label">
+              {tab.label}
+              {tab.Badge && (
+                <span className="tab-bar__badge">
+                  <tab.Badge />
+                </span>
+              )}
+            </span>
           </a>
         ))}
         <ResetDemoButton />

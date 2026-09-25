@@ -17,6 +17,19 @@ describe('storage', () => {
     expect(loadJson('broken', 42)).toBe(42)
   })
 
+  it('fires an nms-storage event with the key only when the saved value changes', () => {
+    const keys: string[] = []
+    const listener = (event: Event) => keys.push((event as CustomEvent<{ key: string }>).detail.key)
+    window.addEventListener('nms-storage', listener)
+
+    saveJson('todos.completed', ['a'])
+    saveJson('todos.completed', ['a'])
+    saveJson('todos.completed', ['a', 'b'])
+
+    window.removeEventListener('nms-storage', listener)
+    expect(keys).toEqual(['todos.completed', 'todos.completed'])
+  })
+
   it('clearAll removes nms: keys and leaves other keys alone', () => {
     saveJson('todos.completed', ['a'])
     localStorage.setItem('nms:v0:old', '1')
