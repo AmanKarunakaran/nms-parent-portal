@@ -7,27 +7,25 @@ export function Badgebook() {
   return (
     <section className="badgebook" aria-labelledby="badgebook-title">
       <h3 id="badgebook-title" className="badgebook__title">
-        Badgebook
+        Badgebook <span className="badgebook__note">(I made these up)</span>
       </h3>
-      <p className="badgebook__hint">
-        {earned.length} of {badges.length} pins earned. Faded pins are still waiting to be won!
-      </p>
-      <ul className="badgebook__grid">
-        {badges.map((badge) => (
-          <li
-            key={badge.id}
-            className={`badgebook__badge${badge.earnedOn ? '' : ' badgebook__badge--locked'}`}
-          >
-            <span className="badgebook__picture" aria-hidden="true">
-              {badge.picture}
-            </span>
-            <span className="badgebook__name">{badge.name}</span>
-            <span className="badgebook__requirement">{badge.requirement}</span>
-            <span className="badgebook__status">
-              {badge.earnedOn ? `Earned ${formatDate(badge.earnedOn)}` : 'Not earned yet'}
-            </span>
-          </li>
-        ))}
+      <ul className="badgebook__row">
+        {earned.map((badge) => {
+          const details = `${badge.name}: ${badge.requirement} Earned ${formatDate(badge.earnedOn!)}.`
+          return (
+            <li key={badge.id} className="badgebook__badge">
+              {/* Focusable so keyboard and touch users can reach the tooltip too. */}
+              <span className="badgebook__picture" tabIndex={0} role="img" aria-label={details}>
+                {badge.picture}
+              </span>
+              <span className="badgebook__tooltip" aria-hidden="true">
+                <strong>{badge.name}</strong>
+                <span>{badge.requirement}</span>
+                <span>Earned {formatDate(badge.earnedOn!)}</span>
+              </span>
+            </li>
+          )
+        })}
       </ul>
     </section>
   )

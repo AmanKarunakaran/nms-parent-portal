@@ -59,11 +59,15 @@ describe('YourStarTab', () => {
 })
 
 describe('Badgebook on the Your Star tab', () => {
-  it('shows earned and not-yet-earned pins', () => {
+  it('shows only earned pins, with their details for hover and screen readers', () => {
     render(<YourStarTab />)
-    const book = screen.getByRole('region', { name: 'Badgebook' })
-    expect(within(book).getByText('Prime Hunter')).toBeInTheDocument()
-    expect(within(book).getByText('Earned Oct 14, 2025')).toBeInTheDocument()
-    expect(within(book).getAllByText('Not earned yet')).toHaveLength(4)
+    const book = screen.getByRole('region', { name: /Badgebook/ })
+    expect(within(book).getAllByRole('img')).toHaveLength(4)
+    expect(
+      within(book).getByRole('img', {
+        name: 'Prime Hunter: Found every prime number under 100. Earned Oct 14, 2025.',
+      }),
+    ).toBeInTheDocument()
+    expect(within(book).queryByText('Shape Shifter')).not.toBeInTheDocument()
   })
 })
