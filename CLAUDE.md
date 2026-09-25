@@ -92,6 +92,10 @@ features.
 - All `localStorage` access goes through one small module (namespaced keys, safe
   JSON parse, a sensible default when the data is missing or corrupt). The UI should
   never call `localStorage` directly.
+- To-dos that can be done in the portal complete themselves: give the seed entry a
+  `completedBy` action and have the feature call `recordAction(...)`
+  (`src/lib/portalActions.ts`) when the parent does it. They are never checked off
+  by hand, and features never import to-do code.
 - **Seed data plus saved changes.** Seed data is read-only; only what the parent did
   is saved (completed to-do IDs, RSVP'd event IDs, submitted reimbursements). An
   edited record saves only the changed fields, merged over the seed record. Never
