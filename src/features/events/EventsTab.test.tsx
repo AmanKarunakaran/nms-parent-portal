@@ -130,6 +130,7 @@ describe('EventsTab', () => {
       expect(this.getAttribute('href')).toBe('blob:event')
     })
 
+    vi.useFakeTimers()
     render(<EventsTab />)
     const item = within(goingSection()).getAllByRole('listitem')[0]
     fireEvent.click(within(item).getByRole('button', { name: 'Add to calendar' }))
@@ -139,6 +140,9 @@ describe('EventsTab', () => {
     expect(blob).toBeInstanceOf(Blob)
     expect(blob.type).toBe('text/calendar')
     expect(click).toHaveBeenCalledTimes(1)
+    expect(revokeStub).not.toHaveBeenCalled()
+    vi.advanceTimersByTime(1000)
     expect(revokeStub).toHaveBeenCalledWith('blob:event')
+    vi.useRealTimers()
   })
 })

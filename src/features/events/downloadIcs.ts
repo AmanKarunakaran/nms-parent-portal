@@ -11,5 +11,6 @@ export function downloadIcs(event: NmsEvent) {
   document.body.append(link)
   link.click()
   link.remove()
-  URL.revokeObjectURL(url)
+  // Revoking in the same tick can cancel the download in Safari.
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
