@@ -1,0 +1,20 @@
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Dependencies & build output
+node_modules/
+dist/
+build/
+.vercel/
+
+# Env
+.env*
+
+# Private task brief (repo will be shared publicly)
+*.docx
+
+# Claude Code transient/personal bits
+.claude/worktrees/
+.claude/settings.local.json
