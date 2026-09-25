@@ -35,7 +35,7 @@ describe('groupTodos', () => {
     )
     expect(idsByGroup(groups)).toEqual({
       overdue: ['minus-1'],
-      urgent: ['day-0', 'day-7'],
+      soon: ['day-0', 'day-7'],
       comingUp: ['day-8', 'day-30'],
       later: ['day-31'],
       done: [],
@@ -59,7 +59,7 @@ describe('groupTodos', () => {
     )
     expect(idsByGroup(groups)).toEqual({
       overdue: [],
-      urgent: ['soon'],
+      soon: ['soon'],
       comingUp: [],
       later: [],
       done: ['late', 'far'],
@@ -68,21 +68,21 @@ describe('groupTodos', () => {
 
   it('ignores completed IDs that match no to-do', () => {
     const groups = groupTodos([todo('a', '2026-09-28')], ['gone'], TODAY)
-    expect(groups.urgent).toHaveLength(1)
+    expect(groups.soon).toHaveLength(1)
     expect(groups.done).toHaveLength(0)
   })
 
-  it('spreads the seed data as planned: 1 overdue, 1 urgent, 2 coming up, 3 later', () => {
+  it('spreads the seed data as planned: 1 overdue, 1 soon, 2 coming up, 3 later', () => {
     const groups = groupTodos(seedTodos, [], TODAY)
     expect(groups.overdue).toHaveLength(1)
-    expect(groups.urgent).toHaveLength(1)
+    expect(groups.soon).toHaveLength(1)
     expect(groups.comingUp).toHaveLength(2)
     expect(groups.later).toHaveLength(3)
   })
 })
 
 describe('needsAttention', () => {
-  it('is true only while an overdue or urgent to-do is open', () => {
+  it('is true only while an overdue or soon to-do is open', () => {
     const list = [todo('late', '2026-09-01'), todo('soon', '2026-09-28'), todo('far', '2027-01-01')]
     expect(needsAttention(groupTodos(list, [], TODAY))).toBe(true)
     expect(needsAttention(groupTodos(list, ['late'], TODAY))).toBe(true)

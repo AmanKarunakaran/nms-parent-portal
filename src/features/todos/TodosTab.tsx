@@ -1,23 +1,27 @@
+import { useEffect, useState } from 'react'
 import { DEMO_TODAY } from '../../data/demoDate'
 import { todos } from '../../data/todos'
-import { COMING_UP_DAYS, groupTodos, URGENT_DAYS, type TodoGroupId } from './groupTodos'
+import { COMING_UP_DAYS, groupTodos, SOON_DAYS, type TodoGroupId } from './groupTodos'
 import { TodoGroup } from './TodoGroup'
-import { logTodoEvents, useLogShownOnce } from './todoLog'
+import { useLogShownOnce } from './todoLog'
 import { useCompletedTodos } from './useCompletedTodos'
 import './TodosTab.css'
 
 const plural = (count: number) => (count === 1 ? 'to-do' : 'to-dos')
+const STATUS_MS = 6000
 
-// Groups render in this order and are hidden when empty. A group with
-// `showLabel` starts collapsed behind a "Show ..." button.
+// Groups are hidden when empty. A group with `showLabel` starts collapsed behind a
+// "Show ..." button. `side` groups sit in the right-hand column on wide screens;
+// on phones everything stacks in this order.
 const GROUPS: {
   id: TodoGroupId
   title: string
   hint: string
+  side?: boolean
   showLabel?: (count: number) => string
 }[] = [
-  { id: 'overdue', title: 'Overdue', hint: 'These are past their due date.' },
-  { id: 'urgent', title: 'Urgent', hint: `Due in the next ${URGENT_DAYS} days.` },
+  { id: 'soon', title: 'Soon', hint: `Due in the next ${SOON_DAYS} days.` },
+  { id: 'overdue', title: 'Overdue', hint: 'These are past their due date.', side: true },
   { id: 'comingUp', title: 'Coming up', hint: `Due in the next ${COMING_UP_DAYS} days.` },
   {
     id: 'later',
@@ -28,56 +32,91 @@ const GROUPS: {
   {
     id: 'done',
     title: 'Done',
-    hint: 'Nice work! Uncheck a to-do if you need to do it again.',
+    hint: 'Nice work! Move a to-do back if you need to do it again.',
     showLabel: (count) => `Show ${count} done ${plural(count)}`,
   },
 ]
 
 export function TodosTab() {
-  const [completed, setCompleted] = useCompletedTodos()
+  const { completed, markDone, moveBack } = useCompletedTodos()
+  const [selected, setSelected] = useState<string[]>([])
+  const [statusMessage, setStatusMessage] = useState('')
   const groups = groupTodos(todos, completed, DEMO_TODAY)
   const allDone = groups.done.length === todos.length
+  // Something completed elsewhere is no longer selectable.
+  const selectedOpen = selected.filter((id) => !completed.includes(id))
 
   useLogShownOnce(
     GROUPS.filter((group) => !group.showLabel).flatMap((group) => groups[group.id].map((todo) => todo.id)),
   )
 
-  function handleToggle(id: string) {
-    const wasDone = completed.includes(id)
-    setCompleted(wasDone ? completed.filter((doneId) => doneId !== id) : [...completed, id])
-    logTodoEvents([{ todoId: id, event: wasDone ? 'uncompleted' : 'completed' }])
+  useEffect(() => {
+    if (!statusMessage) return
+    const timer = setTimeout(() => setStatusMessage(''), STATUS_MS)
+    return () => clearTimeout(timer)
+  }, [statusMessage])
+
+  function handleSelect(id: string) {
+    setSelected((ids) => (ids.includes(id) ? ids.filter((selectedId) => selectedId !== id) : [...ids, id]))
   }
+
+  function handleConfirm() {
+    markDone(selectedOpen)
+    setSelected([])
+    setStatusMessage(`Nice work! ${selectedOpen.length} ${plural(selectedOpen.length)} marked as done.`)
+  }
+
+  function handleMoveBack(id: string) {
+    moveBack(id)
+    setStatusMessage('')
+  }
+
+  const renderGroups = (side: boolean) =>
+    GROUPS.filter((group) => Boolean(group.side) === side && groups[group.id].length > 0).map((group) => (
+      <TodoGroup
+        key={group.id}
+        groupId={group.id}
+        title={group.title}
+        hint={group.hint}
+        todos={groups[group.id]}
+        showLabel={group.showLabel}
+        selectedIds={selectedOpen}
+        onSelect={handleSelect}
+        onMoveBack={handleMoveBack}
+      />
+    ))
+  const sideGroups = renderGroups(true)
 
   return (
     <section className="todos">
       <h2 className="todos__title">To-dos</h2>
-      <p className="todos__summary">
-        {groups.done.length} of {todos.length} done
-      </p>
       <p className="todos__hint">
-        Check off each to-do when it's finished. Links take you to the part of the portal
-        where you can do it.
+        Tick the to-dos you've finished, then press the button to mark them as done. Links take
+        you to the part of the portal where you can do each one.
       </p>
 
       {/* The open groups are all empty by now, so this takes their place. */}
       {allDone && (
-        <p className="todos__all-done" role="status">
+        <p className="todos__all-done">
           You're all caught up! Every to-do is done. Thank you for helping your Star shine.
         </p>
       )}
 
-      <div className="todos__groups">
-        {GROUPS.filter((group) => groups[group.id].length > 0).map((group) => (
-          <TodoGroup
-            key={group.id}
-            groupId={group.id}
-            title={group.title}
-            hint={group.hint}
-            todos={groups[group.id]}
-            showLabel={group.showLabel}
-            onToggle={handleToggle}
-          />
-        ))}
+      <div className={`todos__groups${sideGroups.length > 0 ? ' todos__groups--with-side' : ''}`}>
+        <div className="todos__main">{renderGroups(false)}</div>
+        {sideGroups.length > 0 && <div className="todos__side">{sideGroups}</div>}
+      </div>
+
+      {/* Sticks to the bottom of the screen so it's always in reach while scrolling. */}
+      <div className="todos__actions">
+        <p className="todos__status" role="status">
+          {statusMessage}
+        </p>
+        {selectedOpen.length > 0 && (
+          <button type="button" className="todos__confirm" onClick={handleConfirm}>
+            Mark {selectedOpen.length} {plural(selectedOpen.length)} as done
+          </button>
+        )}
       </div>
     </section>
   )

@@ -11,17 +11,28 @@ type TodoGroupProps = {
   todos: readonly Todo[]
   // Set for groups that start collapsed; returns the "Show ..." button text.
   showLabel?: (count: number) => string
-  onToggle: (id: string) => void
+  selectedIds: readonly string[]
+  onSelect: (id: string) => void
+  onMoveBack: (id: string) => void
 }
 
-export function TodoGroup({ groupId, title, hint, todos, showLabel, onToggle }: TodoGroupProps) {
+export function TodoGroup({
+  groupId,
+  title,
+  hint,
+  todos,
+  showLabel,
+  selectedIds,
+  onSelect,
+  onMoveBack,
+}: TodoGroupProps) {
   const headingId = useId()
   const listId = useId()
   const [expanded, setExpanded] = useState(false)
   const listVisible = !showLabel || expanded
 
   return (
-    <section className="todo-group" aria-labelledby={headingId}>
+    <section className={`todo-group todo-group--${groupId}`} aria-labelledby={headingId}>
       <h3 id={headingId} className="todo-group__title">
         {title}
       </h3>
@@ -41,7 +52,13 @@ export function TodoGroup({ groupId, title, hint, todos, showLabel, onToggle }: 
         <ul id={listId} className="todo-group__list">
           {todos.map((todo) => (
             <li key={todo.id}>
-              <TodoItem todo={todo} groupId={groupId} onToggle={onToggle} />
+              <TodoItem
+                todo={todo}
+                groupId={groupId}
+                selected={selectedIds.includes(todo.id)}
+                onSelect={onSelect}
+                onMoveBack={onMoveBack}
+              />
             </li>
           ))}
         </ul>

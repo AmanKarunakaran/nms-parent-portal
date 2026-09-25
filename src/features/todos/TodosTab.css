@@ -1,22 +1,11 @@
-.todos {
-  max-width: 48rem;
-  margin: 0 auto;
-}
-
 .todos__title {
   margin: 0 0 0.25rem;
   font-size: 2rem;
   line-height: 1.2;
 }
 
-.todos__summary {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 700;
-}
-
 .todos__hint {
-  margin: 0.25rem 0 2rem;
+  margin: 0 0 2rem;
   color: var(--color-text-muted);
 }
 
@@ -30,8 +19,89 @@
   font-weight: 600;
 }
 
+/* Phones: one stack, with Soon first and Overdue right after it. The column
+   wrappers step aside so every group can be ordered on its own. */
 .todos__groups {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.todos__main,
+.todos__side {
+  display: contents;
+}
+
+.todos__groups .todo-group {
+  order: 3;
+}
+
+.todos__groups .todo-group--soon {
+  order: 1;
+}
+
+.todos__groups .todo-group--overdue {
+  order: 2;
+}
+
+/* Wide screens: the main groups take two-thirds, Overdue sits in the right third. */
+@media (min-width: 900px) {
+  .todos__groups {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .todos__groups--with-side {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .todos__main,
+  .todos__side {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    min-width: 0;
+  }
+}
+
+.todos__actions {
+  position: sticky;
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.todos__status {
+  margin: 0;
+  padding: 0.625rem 1.25rem;
+  border: 1px solid #f0c64d;
+  border-radius: 8px;
+  background: #fff6dc;
+  font-weight: 600;
+  text-align: center;
+}
+
+.todos__status:empty {
+  display: none;
+}
+
+.todos__confirm {
+  padding: 0.875rem 1.75rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-charcoal);
+  color: #ffffff;
+  font: inherit;
+  font-size: 1.125rem;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+  cursor: pointer;
+}
+
+.todos__confirm:hover {
+  background: #3d404d;
 }
