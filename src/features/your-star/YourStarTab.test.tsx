@@ -57,3 +57,13 @@ describe('YourStarTab', () => {
     expect(loadJson('actions.done', {})).toHaveProperty(['your-star.viewed'])
   })
 })
+
+describe('Badgebook on the Your Star tab', () => {
+  it('shows earned and not-yet-earned pins', () => {
+    render(<YourStarTab />)
+    const book = screen.getByRole('region', { name: 'Badgebook' })
+    expect(within(book).getByText('Prime Hunter')).toBeInTheDocument()
+    expect(within(book).getByText('Earned Oct 14, 2025')).toBeInTheDocument()
+    expect(within(book).getAllByText('Not earned yet')).toHaveLength(4)
+  })
+})

@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { courses, liveEvents } from '../../data/history'
 import { star } from '../../data/star'
 import { recordAction } from '../../lib/portalActions'
+import { Badgebook } from './Badgebook'
 import { CourseCard } from './CourseCard'
 import { EventCard } from './EventCard'
 import { HistoryColumn } from './HistoryColumn'
@@ -19,6 +20,7 @@ export function YourStarTab() {
     <section>
       <h2 className="your-star__title">Your Star: {star.name}</h2>
       <p className="your-star__subtitle">This year: September 2025 – August 2026</p>
+      <Badgebook />
       <div className="your-star__columns">
         <HistoryColumn
           title="Classes"
