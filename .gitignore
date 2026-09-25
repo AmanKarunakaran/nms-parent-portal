@@ -18,3 +18,7 @@ build/
 # Claude Code transient/personal bits
 .claude/worktrees/
 .claude/settings.local.json
+
+# Logs / local overrides
+*.log
+*.local

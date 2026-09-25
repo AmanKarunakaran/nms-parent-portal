@@ -18,6 +18,18 @@ it's private and the repo will be public).
   choice and why, (C) what's next. Keep track of cut scope and decisions as you go
   so the write-up is easy to assemble.
 
+## Stack & commands
+
+TypeScript + React + Vite, tested with Vitest + React Testing Library (jsdom), linted
+with oxlint.
+
+- `npm run dev`: dev server
+- `npm run build`: typecheck (`tsc -b`) and production build
+- `npm run lint`: oxlint
+- `npm test`: Vitest, a single run
+
+All of `build`, `lint`, and `test` must be green before a feature is reported done.
+
 ## Users
 
 Parents of elementary-school Stars (some middle school; eventually through high

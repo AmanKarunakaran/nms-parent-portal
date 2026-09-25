@@ -1,0 +1,28 @@
+.portal-header {
+  background: var(--color-brand);
+  color: var(--color-on-brand);
+}
+
+.portal-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: 1rem var(--page-gutter);
+}
+
+.portal-header__title {
+  margin: 0;
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.portal-header__star {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.15);
+  font-weight: 600;
+}

@@ -1,0 +1,16 @@
+.your-star__intro {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.your-star__name {
+  margin: 0.25rem 0 1rem;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.your-star__placeholder {
+  margin: 0;
+  color: var(--color-text-muted);
+}
