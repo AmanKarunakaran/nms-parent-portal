@@ -1,12 +1,25 @@
 .your-star__title {
-  margin: 0 0 1rem;
+  margin: 0 0 0.25rem;
   font-size: 2rem;
   line-height: 1.2;
   text-align: center;
 }
 
-.your-star__placeholder {
-  margin: 0;
+.your-star__subtitle {
+  margin: 0 0 2rem;
   color: var(--color-text-muted);
   text-align: center;
+}
+
+.your-star__columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .your-star__columns {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
 }
