@@ -29,8 +29,9 @@
 }
 
 .tab-bar__tab[aria-selected='true'] {
-  background: var(--color-gold);
-  color: var(--color-charcoal);
+  background: rgb(255 255 255 / 0.16);
+  color: #ffffff;
+  font-weight: 700;
 }
 
 @media (min-width: 768px) {
