@@ -1,34 +1,47 @@
+/* Sidebar on desktop; a horizontal scrolling strip on phones. */
 .tab-bar {
-  background: var(--color-surface);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--color-charcoal);
+  color: #ffffff;
 }
 
 .tab-bar__inner {
   display: flex;
   gap: 0.25rem;
-  max-width: var(--page-max-width);
-  margin: 0 auto;
-  padding: 0 var(--page-gutter);
+  padding: 0.5rem var(--page-gutter);
   overflow-x: auto;
 }
 
 .tab-bar__tab {
   flex-shrink: 0;
-  padding: 0.875rem 1rem;
+  padding: 0.75rem 1rem;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-radius: 6px;
   background: none;
-  color: var(--color-text-muted);
+  color: #ffffff;
   font: inherit;
   font-weight: 600;
+  text-align: left;
   cursor: pointer;
 }
 
 .tab-bar__tab:hover {
-  color: var(--color-text);
+  background: rgb(255 255 255 / 0.1);
 }
 
 .tab-bar__tab[aria-selected='true'] {
-  border-bottom-color: var(--color-brand);
-  color: var(--color-brand);
+  background: var(--color-gold);
+  color: var(--color-charcoal);
+}
+
+@media (min-width: 768px) {
+  .tab-bar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+  }
+
+  .tab-bar__inner {
+    flex-direction: column;
+    padding: 1rem 0.75rem;
+    overflow-x: visible;
+  }
 }

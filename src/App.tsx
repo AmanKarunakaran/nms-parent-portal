@@ -11,15 +11,17 @@ export default function App() {
   return (
     <>
       <PortalHeader starName={star.name} />
-      <TabBar tabs={tabs} activeId={activeTab.id} onSelect={setActiveId} />
-      <main
-        className="page"
-        role="tabpanel"
-        id={`panel-${activeTab.id}`}
-        aria-labelledby={`tab-${activeTab.id}`}
-      >
-        <activeTab.Component />
-      </main>
+      <div className="layout">
+        <TabBar tabs={tabs} activeId={activeTab.id} onSelect={setActiveId} />
+        <main
+          className="page"
+          role="tabpanel"
+          id={`panel-${activeTab.id}`}
+          aria-labelledby={`tab-${activeTab.id}`}
+        >
+          <activeTab.Component />
+        </main>
+      </div>
     </>
   )
 }

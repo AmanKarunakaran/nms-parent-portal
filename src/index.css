@@ -1,15 +1,17 @@
+/* Palette and type follow nationalmathstars.org. Its font (Area Normal) is a paid
+   Adobe font, so Inter stands in. */
 :root {
-  --color-brand: #1f4e8c;
-  --color-on-brand: #ffffff;
-  --color-text: #1c2430;
-  --color-text-muted: #56627a;
-  --color-bg: #f7f8fb;
-  --color-surface: #ffffff;
-  --color-border: #dde2ea;
+  --color-charcoal: #292b35;
+  --color-gold: #ffb600;
+  --color-text: #292b35;
+  --color-text-muted: #666666;
+  --color-bg: #ffffff;
+  --color-border: #cccccc;
   --page-gutter: 1rem;
   --page-max-width: 960px;
+  --sidebar-width: 220px;
 
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: Inter, 'Helvetica Neue', Arial, sans-serif;
   font-size: 18px;
   line-height: 1.5;
   color: var(--color-text);
@@ -32,9 +34,22 @@ body {
   margin: 0;
 }
 
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 4rem);
+}
+
+@media (min-width: 768px) {
+  .layout {
+    flex-direction: row;
+  }
+}
+
 .page {
+  flex: 1;
+  min-width: 0;
   max-width: var(--page-max-width);
   margin: 0 auto;
   padding: 1.5rem var(--page-gutter);
 }
-

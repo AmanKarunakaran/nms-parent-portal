@@ -16,7 +16,8 @@ describe('App', () => {
       'aria-selected',
       'true',
     )
-    expect(screen.getByRole('tabpanel')).toHaveTextContent('Here is your Star')
-    expect(screen.getByRole('heading', { name: 'Starry McStarface' })).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Your Star: Starry McStarface' }),
+    ).toBeInTheDocument()
   })
 })
