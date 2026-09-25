@@ -1,0 +1,45 @@
+.format-filter {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.format-filter__label {
+  margin-right: 0.25rem;
+  font-weight: 700;
+}
+
+.format-filter__option {
+  min-width: 6rem;
+  padding: 0.625rem 1.25rem;
+  border: 2px solid var(--color-charcoal);
+  border-radius: 999px;
+  background: #ffffff;
+  color: var(--color-charcoal);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.format-filter__option:hover {
+  background: #f3f3f3;
+}
+
+.format-filter__option[aria-pressed='true'] {
+  background: var(--color-charcoal);
+  color: #ffffff;
+}
+
+/* On phones the label sits on its own line so the three buttons fit on one row. */
+@media (max-width: 479px) {
+  .format-filter__label {
+    flex-basis: 100%;
+  }
+
+  .format-filter__option {
+    min-width: 0;
+    padding: 0.625rem 1rem;
+  }
+}

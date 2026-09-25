@@ -1,0 +1,14 @@
+/* Same size as the red to-do badge; gold because it's a heads-up, not a warning. */
+.events-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  border-radius: 50%;
+  background: var(--color-gold);
+  color: var(--color-charcoal);
+  font-size: 0.75rem;
+  font-weight: 800;
+  line-height: 1;
+}
